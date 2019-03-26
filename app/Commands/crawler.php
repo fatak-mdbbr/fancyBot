@@ -10,7 +10,6 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\QueryException;
 use LaravelZero\Framework\Commands\Command;
 use React\Socket\Connector;
-use Storage;
 use unreal4u\TelegramAPI\Telegram\Methods\SendPhoto;
 use unreal4u\TelegramAPI\Telegram\Types\Inline\Keyboard\Markup;
 use \React\EventLoop\Factory;
@@ -121,11 +120,11 @@ class Crawler extends Command
                     // $product_image->image_address=$image_add;
                     // $product_image->image_name=basename($url);
                     // $product_image->save();
-                   // echo "\r\nsuccess in saving images\r\n";
+                    // echo "\r\nsuccess in saving images\r\n";
                     $client = new Client(['base_uri' => 'https://www.banimode.com/']);
                     $response = $client->request('GET', $path);
                     $body = $response->getBody();
-                   // Storage::put($image_add, $body);
+                    // Storage::put($image_add, $body);
 
                 }
                 echo "finished all successfully\r\n";
@@ -168,12 +167,15 @@ class Crawler extends Command
         $proxy_port = env('PROXY_PORT');
         $proxy_address = env('PROXY_ADDRESS');
         $loop = Factory::create();
-        $proxy = new sClient('socks5://' . $proxy_address . ':' . $proxy_port, new Connector($loop));
-        $handler = new HttpClientRequestHandler($loop, [
-            'tcp' => $proxy,
+        $config=[
             'timeout' => 3.0,
-            'dns' => false,
-        ]);
+            'dns' => false
+        ];
+        if (env('USE_PROXY') == true) {
+            $proxy = new sClient('socks5://' . $proxy_address . ':' . $proxy_port, new Connector($loop));
+            $config ['tcp'] = $proxy;
+        }
+        $handler = new HttpClientRequestHandler($loop, $config);
 
         $tgLog = new TgLog($token, $handler);
         $inlineKeyboard = new Markup([
@@ -195,7 +197,7 @@ class Crawler extends Command
         $sendPhoto->parse_mode = 'Markdown';
         $sendPhoto->reply_markup = $inlineKeyboard;
         $sendPhoto->caption = $product->product_title .
-        "\r\nقیمت : " . $product->product_price ."\r\n".
+        "\r\nقیمت : " . $product->product_price . "\r\n" .
             $discountCaption;
         $promise = $tgLog->performApiRequest($sendPhoto);
         $promise->then(
