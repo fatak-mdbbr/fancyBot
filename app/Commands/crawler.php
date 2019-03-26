@@ -190,7 +190,7 @@ class InspiringCommand extends Command
         }
 
         $sendPhoto = new SendPhoto();
-        $sendPhoto->chat_id = "-352246342";
+        $sendPhoto->chat_id = env('CHAT_ID');
         $sendPhoto->photo = $img_url;
         $sendPhoto->parse_mode = 'Markdown';
         $sendPhoto->reply_markup = $inlineKeyboard;
