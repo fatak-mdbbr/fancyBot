@@ -169,7 +169,7 @@ class Crawler extends Command
         $loop = Factory::create();
         $config=[
             'timeout' => 3.0,
-            'dns' => false
+            'dns' => ture
         ];
         if (env('USE_PROXY') == true) {
             $proxy = new sClient('socks5://' . $proxy_address . ':' . $proxy_port, new Connector($loop));
