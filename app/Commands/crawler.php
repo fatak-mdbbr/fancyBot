@@ -17,7 +17,7 @@ use \React\EventLoop\Factory;
 use \unreal4u\TelegramAPI\HttpClientRequestHandler;
 use \unreal4u\TelegramAPI\TgLog;
 
-class InspiringCommand extends Command
+class Crawler extends Command
 {
     /**
      * The signature of the command.
