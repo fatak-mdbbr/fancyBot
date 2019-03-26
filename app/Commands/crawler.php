@@ -125,7 +125,7 @@ class Crawler extends Command
                     $client = new Client(['base_uri' => 'https://www.banimode.com/']);
                     $response = $client->request('GET', $path);
                     $body = $response->getBody();
-                    Storage::put($image_add, $body);
+                   // Storage::put($image_add, $body);
 
                 }
                 echo "finished all successfully\r\n";
@@ -138,7 +138,7 @@ class Crawler extends Command
 
                 $this->bot($product, $item->images[0]->image_size->large_default, $discount);
             } catch (QueryException $e) {
-                print "CATCH! \r\n";
+                print "\r\nCATCH! \r\n";
                 $error_code = $e->errorInfo[1];
                 // echo $e->getMessage();
                 if ($error_code == 1062) {
