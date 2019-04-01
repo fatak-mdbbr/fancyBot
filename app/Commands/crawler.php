@@ -159,7 +159,7 @@ class Crawler extends Command
      */
     public function schedule(Schedule $schedule)
     {
-        // $schedule->command(static::class)->everyMinute();
+         $schedule->command(static::class)->hourly();
     }
     public function bot(Product $product, String $img_url, String $discount)
     {
